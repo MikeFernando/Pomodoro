@@ -8,4 +8,5 @@ export interface Cycle {
   task: string
   startDate: Date
   minutesAmount: number
+  interruptedDate?: Date
 }
