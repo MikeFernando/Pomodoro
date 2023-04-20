@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { differenceInSeconds } from 'date-fns'
+import { Play } from 'phosphor-react'
 
 import { schemaNewCycle } from './validation'
 import { Cycle, NewCycleFormData } from './types'
@@ -12,7 +12,7 @@ import * as S from './styles'
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+  const [totalSecondsPassed, setTotalSecondsPassed] = useState(0)
 
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(schemaNewCycle),
@@ -29,11 +29,12 @@ export function Home() {
       id,
       task,
       minutesAmount,
-      starteDate: new Date(),
+      startDate: new Date(),
     }
 
     setCycles((prevState) => [...prevState, newCycle])
     setActiveCycleId(id)
+    setTotalSecondsPassed(0)
 
     reset()
   }
@@ -41,9 +42,9 @@ export function Home() {
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
-  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
+  const currentSeconds = activeCycle ? totalSeconds - totalSecondsPassed : 0
 
-  const minutesAmount = Math.floor(totalSeconds / 60)
+  const minutesAmount = Math.floor(currentSeconds / 60)
   const secondsAmount = currentSeconds % 60
 
   const minutes = String(minutesAmount).padStart(2, '0')
@@ -53,14 +54,26 @@ export function Home() {
   const isSubmitingDisabled = task === ''
 
   useEffect(() => {
+    let interval: number
+
     if (activeCycle) {
-      setInterval(() => {
-        setAmountSecondsPassed(
-          differenceInSeconds(new Date(), activeCycle.starteDate),
+      interval = setInterval(() => {
+        setTotalSecondsPassed(
+          differenceInSeconds(new Date(), activeCycle.startDate),
         )
       }, 1000)
     }
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [activeCycle])
+
+  // useEffect(() => {
+  //   if (activeCycle) {
+  //     document.title = `${minutes}:${seconds}`
+  //   }
+  // }, [minutes, seconds, activeCycle])
 
   return (
     <S.HomeContainer>

@@ -6,6 +6,6 @@ export interface NewCycleFormData {
 export interface Cycle {
   id: string
   task: string
-  starteDate: Date
+  startDate: Date
   minutesAmount: number
 }
