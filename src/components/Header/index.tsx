@@ -14,6 +14,7 @@ export function Header() {
         <NavLink to="/" title="Timer">
           <Timer size={24} />
         </NavLink>
+
         <NavLink to="history" title="Histórico">
           <Scroll size={24} />
         </NavLink>
