@@ -69,11 +69,11 @@ export function Home() {
     }
   }, [activeCycle])
 
-  // useEffect(() => {
-  //   if (activeCycle) {
-  //     document.title = `${minutes}:${seconds}`
-  //   }
-  // }, [minutes, seconds, activeCycle])
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutes}:${seconds}`
+    }
+  }, [minutes, seconds, activeCycle])
 
   return (
     <S.HomeContainer>
