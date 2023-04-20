@@ -55,8 +55,8 @@ export function Home() {
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
-  const currentSeconds = activeCycle ? totalSeconds - totalSecondsPassed : 0
+  const cycleTime = activeCycle ? activeCycle.minutesAmount * 60 : 0
+  const currentSeconds = activeCycle ? cycleTime - totalSecondsPassed : 0
 
   const minutesAmount = Math.floor(currentSeconds / 60)
   const secondsAmount = currentSeconds % 60
@@ -77,7 +77,7 @@ export function Home() {
           activeCycle.startDate,
         )
 
-        if (secondsDifference >= totalSeconds) {
+        if (secondsDifference >= cycleTime) {
           setCycles((state) =>
             state.map((cycle) => {
               if (cycle.id === activeCycleId) {
@@ -89,7 +89,7 @@ export function Home() {
           )
 
           clearInterval(interval)
-          setTotalSecondsPassed(totalSeconds)
+          setTotalSecondsPassed(cycleTime)
         } else {
           setTotalSecondsPassed(secondsDifference)
         }
@@ -99,7 +99,7 @@ export function Home() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle, activeCycleId, totalSeconds])
+  }, [activeCycle, activeCycleId, cycleTime])
 
   useEffect(() => {
     if (activeCycle) {
@@ -134,7 +134,7 @@ export function Home() {
             placeholder="00"
             type="number"
             step={5}
-            min={1}
+            min={5}
             max={60}
             disabled={!!activeCycle}
             {...register('minutesAmount', { valueAsNumber: true })}
