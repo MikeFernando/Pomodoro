@@ -9,4 +9,5 @@ export interface Cycle {
   startDate: Date
   minutesAmount: number
   interruptedDate?: Date
+  finishedDate?: Date
 }
