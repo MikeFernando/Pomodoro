@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { differenceInSeconds } from 'date-fns'
 import { HandPalm, Play } from 'phosphor-react'
+import { differenceInSeconds } from 'date-fns'
 
 import { schemaNewCycle } from './validation'
 import { Cycle, NewCycleFormData } from './types'
+
+import { NewCycleForm } from './components/NewCycleForm'
+import { Countdown } from './components/Countdown'
 
 import * as S from './styles'
 
@@ -32,7 +35,7 @@ export function Home() {
       startDate: new Date(),
     }
 
-    setCycles((prevState) => [...prevState, newCycle])
+    setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
     setTotalSecondsPassed(0)
 
@@ -55,8 +58,8 @@ export function Home() {
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
-  const cycleTime = activeCycle ? activeCycle.minutesAmount * 60 : 0
-  const currentSeconds = activeCycle ? cycleTime - totalSecondsPassed : 0
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
+  const currentSeconds = activeCycle ? totalSeconds - totalSecondsPassed : 0
 
   const minutesAmount = Math.floor(currentSeconds / 60)
   const secondsAmount = currentSeconds % 60
@@ -77,7 +80,7 @@ export function Home() {
           activeCycle.startDate,
         )
 
-        if (secondsDifference >= cycleTime) {
+        if (secondsDifference >= totalSeconds) {
           setCycles((state) =>
             state.map((cycle) => {
               if (cycle.id === activeCycleId) {
@@ -89,7 +92,7 @@ export function Home() {
           )
 
           clearInterval(interval)
-          setTotalSecondsPassed(cycleTime)
+          setTotalSecondsPassed(totalSeconds)
         } else {
           setTotalSecondsPassed(secondsDifference)
         }
@@ -99,7 +102,7 @@ export function Home() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle, activeCycleId, cycleTime])
+  }, [activeCycle, activeCycleId, totalSeconds])
 
   useEffect(() => {
     if (activeCycle) {
@@ -109,47 +112,9 @@ export function Home() {
 
   return (
     <S.HomeContainer>
-      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-        <S.FormContainer>
-          <label htmlFor="task">Vou trabalhar em</label>
-          <S.TaskInput
-            id="task"
-            type="text"
-            list="task-sugestions"
-            placeholder="Dê um nome para o seu projeto"
-            disabled={!!activeCycle}
-            {...register('task')}
-          />
-
-          <datalist id="task-sugestions">
-            <option value="Projeto 1" />
-            <option value="Projeto 2" />
-            <option value="Projeto 3" />
-            <option value="Projeto 4" />
-          </datalist>
-
-          <label htmlFor="minutesAmount">durante</label>
-          <S.MinutesAmountInput
-            id="minutesAmount"
-            placeholder="00"
-            type="number"
-            step={5}
-            min={5}
-            max={60}
-            disabled={!!activeCycle}
-            {...register('minutesAmount', { valueAsNumber: true })}
-          />
-
-          <span>minutos.</span>
-        </S.FormContainer>
-
-        <S.CountdownContainer>
-          <span>{minutes[0]}</span>
-          <span>{minutes[1]}</span>
-          <S.Separator>:</S.Separator>
-          <span>{seconds[0]}</span>
-          <span>{seconds[1]}</span>
-        </S.CountdownContainer>
+      <form onSubmit={handleSubmit(handleCreateNewCycle)}>
+        <NewCycleForm />
+        <Countdown />
 
         {activeCycle ? (
           <S.StopCountdownButton type="button" onClick={handleInterruptCycle}>
