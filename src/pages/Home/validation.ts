@@ -1,6 +1,6 @@
 import * as zod from 'zod'
 
-export const schemaNewCycle = zod.object({
+export const validationSchemaNewCycle = zod.object({
   task: zod.string().min(1, 'Informe uma tarefa!'),
   minutesAmount: zod
     .number()
