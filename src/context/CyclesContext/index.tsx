@@ -2,7 +2,7 @@ import { createContext, useState } from 'react'
 
 import { Cycle, CycleContextData, NewCycleFormData, Props } from './types'
 
-export const CycleContext = createContext({} as CycleContextData)
+export const CyclesContext = createContext({} as CycleContextData)
 
 export function CycleContextProvider({ children }: Props) {
   const [cycles, setCycles] = useState<Cycle[]>([])
@@ -59,8 +59,9 @@ export function CycleContextProvider({ children }: Props) {
   }
 
   return (
-    <CycleContext.Provider
+    <CyclesContext.Provider
       value={{
+        cycles,
         activeCycle,
         activeCycleId,
         createNewCycle,
@@ -71,6 +72,6 @@ export function CycleContextProvider({ children }: Props) {
       }}
     >
       {children}
-    </CycleContext.Provider>
+    </CyclesContext.Provider>
   )
 }

@@ -19,6 +19,7 @@ export interface Cycle {
 }
 
 export interface CycleContextData {
+  cycles: Cycle[]
   activeCycle: Cycle | undefined
   activeCycleId: string | null
   totalSecondsPassed: number

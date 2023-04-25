@@ -1,6 +1,12 @@
+import { useCycles } from '../../hooks/useCycle'
+
 import { HistoryContainer, HistoryList, Status } from './styles'
 
 export function History() {
+  const { cycles } = useCycles()
+
+  console.log(cycles)
+
   return (
     <HistoryContainer>
       <h1>Meu histórico</h1>
