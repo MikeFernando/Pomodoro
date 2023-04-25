@@ -24,8 +24,6 @@ export function CycleContextProvider({ children }: Props) {
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
     setTotalSecondsPassed(0)
-
-    // reset()
   }
 
   function interruptCurrentCycle() {
