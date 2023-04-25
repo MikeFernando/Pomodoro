@@ -2,7 +2,7 @@ import { HandPalm, Play } from 'phosphor-react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useCycles } from '../../hooks/useCycle'
+import { useCycles } from '../../hooks/useCycles'
 
 import { validationSchemaNewCycle } from './validation'
 import { NewCycleFormData } from './types'
